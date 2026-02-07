@@ -44,7 +44,8 @@ export function AuthForm({ role, type }: AuthFormProps) {
             await new Promise((resolve) => setTimeout(resolve, 1500));
 
             // Redirect on success (simulated)
-            router.push("/");
+            const redirectTo = role === "nurse" ? "/nurse/dashboard" : "/";
+            router.push(redirectTo);
         } catch (err) {
             if (err instanceof Error) {
                 setError(err.message);
