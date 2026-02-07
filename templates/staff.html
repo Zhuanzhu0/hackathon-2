@@ -1,0 +1,233 @@
+{% extends "base.html" %}
+
+{% block title %}Staff Panel - HealSync{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-slate-50 flex flex-col">
+    <!-- Navbar -->
+    <header class="bg-white border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-4">
+                    <a href="/" class="text-slate-500 hover:text-teal-600 transition-colors">
+                        <i data-lucide="arrow-left" class="h-5 w-5"></i>
+                    </a>
+                    <div class="flex items-center gap-2">
+                        <div class="bg-teal-600 p-1.5 rounded-lg">
+                            <i data-lucide="clipboard-list" class="h-5 w-5 text-white"></i>
+                        </div>
+                        <span class="font-bold text-lg text-slate-800">Staff Portal</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <span class="text-sm font-medium text-slate-600 hidden sm:block">Ward A - Station 2</span>
+                    <div class="flex items-center gap-2 cursor-pointer">
+                        <div
+                            class="h-9 w-9 rounded-full bg-teal-100 flex items-center justify-center text-teal-700 font-bold">
+                            NS</div>
+                        <span class="text-sm font-medium text-slate-700 hidden sm:block">Nurse Sarah</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+        <!-- Left Column: Actions -->
+        <div class="space-y-6 lg:col-span-2">
+
+            <!-- Quick Actions -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <button
+                    class="flex flex-col items-center justify-center p-4 bg-white border border-slate-200 rounded-xl hover:border-teal-500 hover:shadow-md transition-all group">
+                    <div
+                        class="h-10 w-10 bg-teal-50 rounded-full flex items-center justify-center mb-2 group-hover:bg-teal-600 transition-colors">
+                        <i data-lucide="user-plus" class="h-5 w-5 text-teal-600 group-hover:text-white"></i>
+                    </div>
+                    <span class="text-sm font-medium text-slate-700">Admit Patient</span>
+                </button>
+                <button
+                    class="flex flex-col items-center justify-center p-4 bg-white border border-slate-200 rounded-xl hover:border-indigo-500 hover:shadow-md transition-all group">
+                    <div
+                        class="h-10 w-10 bg-indigo-50 rounded-full flex items-center justify-center mb-2 group-hover:bg-indigo-600 transition-colors">
+                        <i data-lucide="activity" class="h-5 w-5 text-indigo-600 group-hover:text-white"></i>
+                    </div>
+                    <span class="text-sm font-medium text-slate-700">Record Vitals</span>
+                </button>
+                <button
+                    class="flex flex-col items-center justify-center p-4 bg-white border border-slate-200 rounded-xl hover:border-amber-500 hover:shadow-md transition-all group">
+                    <div
+                        class="h-10 w-10 bg-amber-50 rounded-full flex items-center justify-center mb-2 group-hover:bg-amber-600 transition-colors">
+                        <i data-lucide="alert-triangle" class="h-5 w-5 text-amber-600 group-hover:text-white"></i>
+                    </div>
+                    <span class="text-sm font-medium text-slate-700">Report Incident</span>
+                </button>
+                <button
+                    class="flex flex-col items-center justify-center p-4 bg-white border border-slate-200 rounded-xl hover:border-purple-500 hover:shadow-md transition-all group">
+                    <div
+                        class="h-10 w-10 bg-purple-50 rounded-full flex items-center justify-center mb-2 group-hover:bg-purple-600 transition-colors">
+                        <i data-lucide="file-text" class="h-5 w-5 text-purple-600 group-hover:text-white"></i>
+                    </div>
+                    <span class="text-sm font-medium text-slate-700">View Logs</span>
+                </button>
+            </div>
+
+            <!-- Vitals Entry Form (Example) -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center">
+                    <h3 class="font-bold text-slate-800">Record Patient Vitals</h3>
+                    <span class="text-xs text-slate-500">{{ new Date().toLocaleTimeString() }}</span>
+                </div>
+                <div class="p-6">
+                    <form class="space-y-4" @submit.prevent="submitVitals">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Patient ID / Name</label>
+                            <div class="relative">
+                                <i data-lucide="search" class="absolute left-3 top-2.5 h-5 w-5 text-slate-400"></i>
+                                <input type="text" placeholder="Scan wristband or type name..."
+                                    class="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Heart Rate (bpm)</label>
+                                <input type="number"
+                                    class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                                    placeholder="72">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">SpO2 (%)</label>
+                                <input type="number"
+                                    class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                                    placeholder="98">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Temp (°F)</label>
+                                <input type="number" step="0.1"
+                                    class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                                    placeholder="98.6">
+                            </div>
+                        </div>
+
+                        <div class="pt-2">
+                            <button type="submit"
+                                class="w-full sm:w-auto px-6 py-2 bg-teal-600 text-white font-medium rounded-lg hover:bg-teal-700 focus:ring-4 focus:ring-teal-500/20 transition-all">
+                                Save Vitals
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Recent Activity Log -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200">
+                <div class="px-6 py-4 border-b border-slate-100">
+                    <h3 class="font-bold text-slate-800">Recent Activity</h3>
+                </div>
+                <div class="divide-y divide-slate-100">
+                    <div v-for="log in activityLogs" :key="log.id" class="px-6 py-3 flex gap-3 text-sm">
+                        <span class="text-slate-400 font-mono text-xs mt-0.5">{{ log.time }}</span>
+                        <div>
+                            <p class="text-slate-800 font-medium">{{ log.action }}</p>
+                            <p class="text-slate-500">{{ log.details }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right Column: Status & Tasks -->
+        <div class="space-y-6">
+
+            <!-- Tasks -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <h3 class="font-bold text-slate-800 mb-4 flex items-center justify-between">
+                    Pending Tasks <span class="bg-red-100 text-red-700 text-xs px-2 py-0.5 rounded-full">3 High</span>
+                </h3>
+                <ul class="space-y-3">
+                    <li v-for="task in tasks" :key="task.id" class="flex gap-3 items-start">
+                        <input type="checkbox"
+                            class="mt-1 h-4 w-4 text-teal-600 rounded border-slate-300 focus:ring-teal-500">
+                        <div>
+                            <p class="text-sm font-medium text-slate-800">{{ task.title }}</p>
+                            <p class="text-xs text-slate-500">{{ task.patient }} • <span class="text-red-600">{{
+                                    task.priority }}</span></p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Equipment Status -->
+            <div class="bg-slate-800 rounded-xl shadow-sm border border-slate-700 p-6 text-white">
+                <h3 class="font-bold mb-4 flex items-center gap-2">
+                    <i data-lucide="cpu" class="text-teal-400"></i> Equipment Status
+                </h3>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="text-slate-300">ECG Monitor A1</span>
+                        <span class="flex items-center gap-1 text-green-400"><span
+                                class="h-2 w-2 bg-green-400 rounded-full"></span> Online</span>
+                    </div>
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="text-slate-300">Ventilator V2</span>
+                        <span class="flex items-center gap-1 text-green-400"><span
+                                class="h-2 w-2 bg-green-400 rounded-full"></span> Online</span>
+                    </div>
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="text-slate-300">Infusion Pump P4</span>
+                        <span class="flex items-center gap-1 text-amber-400"><span
+                                class="h-2 w-2 bg-amber-400 rounded-full animate-pulse"></span> Low Battery</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const { createApp, ref, onMounted } = Vue;
+
+    createApp({
+        setup() {
+            const tasks = ref([
+                { id: 1, title: "Check SpO2 Levels", patient: "John Doe (Room 304)", priority: "Urgent" },
+                { id: 2, title: "Administer Insulin", patient: "Jane Smith (Room 305)", priority: "High" },
+                { id: 3, title: "Bed Linen Change", patient: "Robert Brown (Room 301)", priority: "Normal" }
+            ]);
+
+            const activityLogs = ref([
+                { id: 1, time: "10:45", action: "Vitals Recorded", details: "Recorded vitals for John Doe" },
+                { id: 2, time: "10:30", action: "Patient Admitted", details: "Admitted New Patient: Sarah Connor" },
+                { id: 3, time: "09:15", action: "Alert Resolved", details: "Resolved low oxygen alert for Bed 2" }
+            ]);
+
+            const submitVitals = () => {
+                alert("Vitals saved successfully! (Simulation)");
+                activityLogs.value.unshift({
+                    id: Date.now(),
+                    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                    action: "Vitals Recorded",
+                    details: "Manual entry for Patient"
+                });
+            };
+
+            onMounted(() => {
+                lucide.createIcons();
+            });
+
+            return {
+                tasks,
+                activityLogs,
+                submitVitals
+            };
+        }
+    }).mount('#app');
+</script>
+{% endblock %}

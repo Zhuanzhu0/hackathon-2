@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="min-h-screen flex flex-col">
+    <!-- Navbar -->
+    <nav class="bg-white border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center gap-2">
+                        <i data-lucide="activity" class="h-8 w-8 text-blue-600"></i>
+                        <span
+                            class="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">PulseGuard</span>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="#"
+                        class="text-slate-500 hover:text-slate-900 px-3 py-2 rounded-md text-sm font-medium">About</a>
+                    <a href="#"
+                        class="text-slate-500 hover:text-slate-900 px-3 py-2 rounded-md text-sm font-medium">Services</a>
+                    <a href="#"
+                        class="text-slate-500 hover:text-slate-900 px-3 py-2 rounded-md text-sm font-medium">Contact</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <main class="flex-grow">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h1 class="text-4xl font-extrabold text-slate-900 sm:text-5xl md:text-6xl">
+                    <span class="block">Intelligent Health Monitoring</span>
+                    <span class="block text-blue-600">Clinical Decision Support</span>
+                </h1>
+                <p class="mt-3 max-w-md mx-auto text-base text-slate-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
+                    Real-time patient monitoring, AI-powered insights, and seamless communication for modern healthcare.
+                    A hackathon-ready solution optimized for 5G connectivity.
+                </p>
+                <div class="mt-10 max-w-sm mx-auto sm:max-w-none sm:flex sm:justify-center gap-4">
+
+                    <!-- Role Cards -->
+                    <a href="/patient"
+                        class="group relative rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md hover:border-blue-400 transition-all text-left w-64">
+                        <div
+                            class="absolute -top-4 -right-4 bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold shadow-sm">
+                            Public Access
+                        </div>
+                        <div
+                            class="h-12 w-12 bg-blue-100 rounded-xl flex items-center justify-center mb-4 group-hover:bg-blue-600 transition-colors">
+                            <i data-lucide="user" class="h-6 w-6 text-blue-600 group-hover:text-white"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900">Patient Portal</h3>
+                        <p class="mt-2 text-sm text-slate-500">View your health records, vitals, and appointments.</p>
+                    </a>
+
+                    <a href="/login?role=doctor"
+                        class="group relative rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md hover:border-indigo-400 transition-all text-left w-64">
+                        <div
+                            class="absolute -top-4 -right-4 bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-xs font-bold shadow-sm">
+                            Login Required
+                        </div>
+                        <div
+                            class="h-12 w-12 bg-indigo-100 rounded-xl flex items-center justify-center mb-4 group-hover:bg-indigo-600 transition-colors">
+                            <i data-lucide="stethoscope" class="h-6 w-6 text-indigo-600 group-hover:text-white"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900">Doctor Dashboard</h3>
+                        <p class="mt-2 text-sm text-slate-500">Monitor patients, AI alerts, and clinical decisions.</p>
+                    </a>
+
+                    <a href="/login?role=staff"
+                        class="group relative rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md hover:border-teal-400 transition-all text-left w-64">
+                        <div
+                            class="absolute -top-4 -right-4 bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-xs font-bold shadow-sm">
+                            Login Required
+                        </div>
+                        <div
+                            class="h-12 w-12 bg-teal-100 rounded-xl flex items-center justify-center mb-4 group-hover:bg-teal-600 transition-colors">
+                            <i data-lucide="clipboard-list" class="h-6 w-6 text-teal-600 group-hover:text-white"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900">Staff Panel</h3>
+                        <p class="mt-2 text-sm text-slate-500">Admissions, vitals entry, and equipment tracking.</p>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-white border-t border-slate-200">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <p class="text-center text-sm text-slate-500">&copy; 2026 PulseGuard System. All rights reserved.</p>
+        </div>
+    </footer>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    createApp({
+        setup() {
+            onMounted(() => {
+                lucide.createIcons();
+            });
+            return {};
+        }
+    }).mount('#app');
+</script>
+{% endblock %}
