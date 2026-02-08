@@ -43,8 +43,34 @@ export function AuthForm({ role, type }: AuthFormProps) {
             // Simulate API call
             await new Promise((resolve) => setTimeout(resolve, 1500));
 
+            // Store user data in localStorage for demo purposes
+            if (fullName) {
+                localStorage.setItem("user_name", fullName);
+            }
+
+            // --- SYNC UPDATE: Create/Update patient in shared storage ---
+            if (role === "patient" && type === "signup") {
+                // Dynamically import to avoid server-side issues with localStorage in imports
+                const { getStoredPatients, savePatients } = await import("@/lib/mock-data");
+                const currentPatients = getStoredPatients();
+
+                // For this demo, we override the first patient "p1" with the new user's details
+                // This ensures the dashboard (which defaults to p1) shows the new user
+                // In a real app, we'd add a new patient and return their ID
+                const updatedPatients = currentPatients.map(p =>
+                    p.id === "p1" ? { ...p, name: fullName, age: 30 } : p
+                );
+
+                savePatients(updatedPatients);
+            }
+            // ------------------------------------------------------------
+
             // Redirect on success (simulated)
-            const redirectTo = role === "nurse" ? "/nurse/dashboard" : "/";
+            const redirectTo = {
+                doctor: "/doctor/dashboard",
+                nurse: "/nurse/dashboard",
+                patient: "/patient/dashboard",
+            }[role];
             router.push(redirectTo);
         } catch (err) {
             if (err instanceof Error) {
