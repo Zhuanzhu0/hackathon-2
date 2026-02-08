@@ -1,7 +1,7 @@
 "use strict";
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Loader2 } from "lucide-react";
@@ -28,6 +28,46 @@ export function AuthForm({ role, type }: AuthFormProps) {
     const [error, setError] = useState<string | null>(null);
     const [isVerifying, setIsVerifying] = useState(false);
     const [pendingEmail, setPendingEmail] = useState("");
+
+    // Check session state (from master branch)
+    const [checkingSession, setCheckingSession] = useState(true);
+    const [existingSession, setExistingSession] = useState<{
+        isLoggedIn: boolean;
+        role: "doctor" | "nurse" | "patient" | null;
+    }>({ isLoggedIn: false, role: null });
+
+    // Check for existing session on mount (from master branch)
+    useEffect(() => {
+        async function checkExistingSession() {
+            // Only check session for login pages, not signup
+            if (type !== "login") {
+                setCheckingSession(false);
+                return;
+            }
+
+            try {
+                // Dynamic import to avoid circular dependencies if any
+                const { getCurrentUser, getUserProfile } = await import("@/lib/auth");
+
+                const { user } = await getCurrentUser();
+                if (!user) {
+                    setCheckingSession(false);
+                    return;
+                }
+
+                const { profile } = await getUserProfile(user.id);
+                if (profile) {
+                    setExistingSession({ isLoggedIn: true, role: profile.role });
+                }
+            } catch (err) {
+                console.error("Session check error:", err);
+            } finally {
+                setCheckingSession(false);
+            }
+        }
+
+        checkExistingSession();
+    }, [type]);
 
     async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -136,6 +176,53 @@ export function AuthForm({ role, type }: AuthFormProps) {
         nurse: "text-teal-600",
         patient: "text-indigo-600",
     };
+
+    // Show loading state while checking session
+    if (checkingSession) {
+        return (
+            <Card className="w-full max-w-md mx-auto shadow-xl border-0 ring-1 ring-slate-200">
+                <CardContent className="flex items-center justify-center py-12">
+                    <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
+                </CardContent>
+            </Card>
+        );
+    }
+
+    // If already logged in, show message instead of form
+    if (existingSession.isLoggedIn && existingSession.role) {
+        const dashboardMap = {
+            doctor: "/doctor/dashboard",
+            nurse: "/nurse/dashboard",
+            patient: "/patient/dashboard",
+        };
+        const dashboardUrl = dashboardMap[existingSession.role];
+
+        return (
+            <Card className="w-full max-w-md mx-auto shadow-xl border-0 ring-1 ring-slate-200">
+                <CardHeader className="space-y-1">
+                    <Link
+                        href="/"
+                        className="flex items-center text-sm text-slate-500 hover:text-slate-900 mb-4 transition-colors"
+                    >
+                        <ArrowLeft className="mr-2 h-4 w-4" />
+                        Back to Home
+                    </Link>
+                    <CardTitle className="text-2xl font-bold">Already Logged In</CardTitle>
+                    <CardDescription>
+                        You are already logged in as {roleLabels[existingSession.role]}.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    <Button
+                        className="w-full"
+                        onClick={() => router.push(dashboardUrl)}
+                    >
+                        Go to Dashboard
+                    </Button>
+                </CardContent>
+            </Card>
+        );
+    }
 
     if (isVerifying) {
         return (

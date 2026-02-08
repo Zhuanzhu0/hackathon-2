@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { initialPatients, type Patient, fluctuateVitals } from "@/lib/mock-data";
 import { PatientCard } from "@/components/nurse/PatientCard";
-import { Activity, Bell, Filter, Search, UserPlus } from "lucide-react";
+import { Activity, Bell, Filter, Search, UserPlus, LogOut, Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { AdmitPatientModal } from "@/components/nurse/AdmitPatientModal";
@@ -11,10 +12,12 @@ import { toast } from "sonner";
 import { usePatientSync } from "@/hooks/use-patient-sync";
 
 export default function NurseDashboard() {
+    const router = useRouter();
     const [patients, setPatients] = useState<Patient[]>([]); // Start empty to avoid hydration mismatch
     const [searchTerm, setSearchTerm] = useState("");
     const [filter, setFilter] = useState<"All" | "CRITICAL" | "WARNING">("All");
     const [admitOpen, setAdmitOpen] = useState(false);
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
 
     // Simulate real-time updates
     const { broadcastVitals } = usePatientSync();
@@ -96,6 +99,28 @@ export default function NurseDashboard() {
         });
     };
 
+    async function handleLogout() {
+        setIsLoggingOut(true);
+
+        try {
+            const { signOutUser } = await import("@/lib/auth");
+            const { error } = await signOutUser();
+
+            if (error) {
+                toast.error("Failed to log out. Please try again.");
+                setIsLoggingOut(false);
+                return;
+            }
+
+            // Success - redirect to home
+            router.push("/");
+        } catch (err) {
+            console.error("Logout error:", err);
+            toast.error("Failed to log out. Please try again.");
+            setIsLoggingOut(false);
+        }
+    }
+
     const filteredPatients = patients.filter((patient) => {
         const matchesSearch = patient.name
             .toLowerCase()
@@ -130,6 +155,18 @@ export default function NurseDashboard() {
                 <div className="flex gap-4 items-center">
                     <Button onClick={() => setAdmitOpen(true)} className="bg-primary hover:bg-primary/90 text-primary-foreground">
                         <UserPlus className="mr-2 h-4 w-4" /> Admit Patient
+                    </Button>
+                    <Button
+                        variant="outline"
+                        onClick={handleLogout}
+                        disabled={isLoggingOut}
+                    >
+                        {isLoggingOut ? (
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        ) : (
+                            <LogOut className="mr-2 h-4 w-4" />
+                        )}
+                        {isLoggingOut ? "Logging out..." : "Logout"}
                     </Button>
                     <div className="bg-destructive/10 text-destructive px-4 py-2 rounded-lg font-medium border border-destructive/20 flex items-center gap-2">
                         <div className="w-2 h-2 rounded-full bg-destructive animate-pulse" />
