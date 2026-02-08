@@ -1,3 +1,4 @@
+"use strict";
 "use client";
 
 import { useState, useEffect } from "react";
@@ -42,71 +43,44 @@ export function AuthForm({ role, type }: AuthFormProps) {
         const fullName = formData.get("fullName") as string;
 
         try {
-            if (type === "login") {
-                // Import the auth functions at the top of the file
-                const { signInWithProfile } = await import("@/lib/auth");
+            // Simulate API call
+            console.log("Submitting:", { role, type, email, password, fullName });
+            await new Promise((resolve) => setTimeout(resolve, 1500));
 
-                // Sign in with profile verification
-                const { profile, error: authError } = await signInWithProfile(email, password);
+            // Store user data in localStorage for demo purposes
+            if (fullName) {
+                localStorage.setItem("user_name", fullName);
+            }
 
-                if (authError) {
-                    setError(authError.message);
-                    return;
-                }
+            // --- SYNC UPDATE: Create/Update patient in shared storage ---
+            if (role === "patient" && type === "signup") {
+                // Dynamically import to avoid server-side issues with localStorage in imports
+                const { getStoredPatients, savePatients } = await import("@/lib/mock-data");
+                const currentPatients = getStoredPatients();
 
-                if (!profile) {
-                    setError("Authentication failed. Please try again.");
-                    return;
-                }
-
-                // Check if profile role matches the page role (Task A)
-                if (profile.role !== role) {
-                    // Security: Use same error message to prevent role enumeration
-                    setError("Invalid email or password");
-
-                    // Sign out the user to prevent partial authentication
-                    const { signOutUser } = await import("@/lib/auth");
-                    await signOutUser();
-                    return;
-                }
-
-                // Redirect based on role
-                const redirectMap = {
-                    doctor: "/doctor/dashboard",
-                    nurse: "/nurse/dashboard",
-                    patient: "/patient/dashboard",
-                };
-
-                const redirectTo = redirectMap[profile.role] || "/";
-                router.push(redirectTo);
-            } else {
-                // Signup flow
-                const { signUpUser } = await import("@/lib/auth");
-
-                const { user, error: authError } = await signUpUser(
-                    email,
-                    password,
-                    fullName,
-                    role
+                // For this demo, we override the first patient "p1" with the new user's details
+                const updatedPatients = currentPatients.map(p =>
+                    p.id === "p1" ? { ...p, name: fullName, age: 30 } : p
                 );
 
-                if (authError) {
-                    setError(authError.message);
-                    return;
-                }
-
-                if (!user) {
-                    setError("Signup failed. Please try again.");
-                    return;
-                }
-
-                // Show success message or redirect
-                // For now, redirect to login page
-                router.push(`/${role}/login`);
+                savePatients(updatedPatients);
             }
+            // ------------------------------------------------------------
+
+            // Redirect on success (simulated)
+            const redirectTo = {
+                doctor: "/doctor/dashboard",
+                nurse: "/nurse/dashboard",
+                patient: "/patient/dashboard",
+            }[role];
+            router.push(redirectTo);
         } catch (err) {
-            console.error("Authentication error:", err);
-            setError("An unexpected error occurred. Please try again.");
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("An unexpected error occurred.");
+            }
+
         } finally {
             setIsLoading(false);
         }
