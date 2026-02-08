@@ -16,6 +16,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "PulseGuard",
   description: "Intelligent Patient Monitoring",
+  icons: {
+    icon: "/logo.svg",
+  },
 };
 
 export default function RootLayout({

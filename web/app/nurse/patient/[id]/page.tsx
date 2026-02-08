@@ -7,6 +7,7 @@ import { initialPatients, type Patient } from "@/lib/mock-data";
 import { VitalCard } from "@/components/nurse/VitalCard";
 import { Waveform } from "@/components/nurse/Waveform";
 import { CriticalAlertModal } from "@/components/nurse/CriticalAlertModal";
+import { InAppCallOverlay } from "@/components/nurse/InAppCallOverlay";
 import { DischargeModal } from "@/components/nurse/DischargeModal";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -38,6 +39,7 @@ export default function PatientMonitor({ params }: { params: Promise<{ id: strin
     const [escalationStatus, setEscalationStatus] = useState<"idle" | "sending" | "sent">("idle");
     const [messageOpen, setMessageOpen] = useState(false);
     const [messageText, setMessageText] = useState("");
+    const [showCallOverlay, setShowCallOverlay] = useState(false); // New state for call overlay
 
     // Modals State
     const [dischargeOpen, setDischargeOpen] = useState(false);
@@ -64,20 +66,22 @@ export default function PatientMonitor({ params }: { params: Promise<{ id: strin
             description: "Message delivered. Initiating call..."
         });
 
-        // 2. Initiate Phone Call
-        // In a real app, this would use the doctor's real number
-        const phoneNumber = patient.doctorPhone || "911";
-
-        // Small delay to let the user see the "Sent" state before the browser handles the tel link
+        // 2. Initiate Phone Call (In-App Overlay)
         setTimeout(() => {
-            window.location.href = `tel:${phoneNumber}`;
+            setShowCallOverlay(true);
         }, 500);
 
-        // Auto close modal after a moment
-        setTimeout(() => {
-            setShowCriticalModal(false);
-            setEscalationStatus("idle");
-        }, 2500);
+        // Close modal
+        setShowCriticalModal(false);
+        setEscalationStatus("idle");
+    };
+
+    const handleEndCall = () => {
+        setShowCallOverlay(false);
+        updateStatus("Warning"); // Reset status after call ends
+        toast.info("Call Ended", {
+            description: "Patient status updated to 'Warning'"
+        });
     };
 
     const handleAcknowledge = () => {
@@ -128,7 +132,16 @@ export default function PatientMonitor({ params }: { params: Promise<{ id: strin
     };
 
     return (
-        <div className={`min-h-screen bg-slate-50 p-4 pb-24 transition-colors duration-1000 ${patient.status === 'Critical' ? 'bg-red-50/50' : ''}`}>
+        <div className={`min-h-screen bg-muted p-4 pb-24 transition-colors duration-1000 ${patient.status === 'Critical' ? 'bg-red-50/50' : ''}`}>
+
+            {/* In-App Call Overlay */}
+            {showCallOverlay && (
+                <InAppCallOverlay
+                    doctorName={patient.assignedDoctor}
+                    onEndCall={handleEndCall}
+                />
+            )}
+
             {/* Simulation Wrapper for Critical Alert */}
             {showCriticalModal && (
                 <CriticalAlertModal
@@ -167,7 +180,7 @@ export default function PatientMonitor({ params }: { params: Promise<{ id: strin
                                 {patient.status}
                             </Badge>
                         </h1>
-                        <p className="text-slate-500 text-sm">
+                        <p className="text-muted-foreground text-sm">
                             ID: {patient.id} • {patient.ward} • Bed {patient.bed} • {patient.gender}, {patient.age}y
                         </p>
                     </div>

@@ -134,7 +134,7 @@ export default function NurseDashboard() {
     const warningCount = patients.filter((p) => p.status === "Warning").length;
 
     return (
-        <div className="min-h-screen bg-background p-4 sm:p-8">
+        <div className="min-h-screen bg-muted p-4 sm:p-8">
             <AdmitPatientModal
                 open={admitOpen}
                 onOpenChange={setAdmitOpen}
@@ -144,8 +144,8 @@ export default function NurseDashboard() {
             {/* Header */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold text-foreground flex items-center gap-2">
-                        <Activity className="text-primary" />
+                    <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
+                        <img src="/logo.svg" alt="PulseGuard Logo" className="w-8 h-8 object-contain" />
                         Nurse Dashboard
                     </h1>
                     <p className="text-muted-foreground">
@@ -182,7 +182,7 @@ export default function NurseDashboard() {
             {/* Filters and Search */}
             <div className="flex flex-col sm:flex-row gap-4 mb-8 bg-card p-4 rounded-xl border shadow-sm">
                 <div className="relative flex-1">
-                    <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
+                    <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                     <Input
                         placeholder="Search patients by name..."
                         value={searchTerm}

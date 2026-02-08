@@ -180,7 +180,7 @@ export function AuthForm({ role, type }: AuthFormProps) {
     // Show loading state while checking session
     if (checkingSession) {
         return (
-            <Card className="w-full max-w-md mx-auto shadow-xl border-0 ring-1 ring-slate-200">
+            <Card className="w-full max-w-md mx-auto shadow-xl">
                 <CardContent className="flex items-center justify-center py-12">
                     <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
                 </CardContent>
@@ -198,11 +198,11 @@ export function AuthForm({ role, type }: AuthFormProps) {
         const dashboardUrl = dashboardMap[existingSession.role];
 
         return (
-            <Card className="w-full max-w-md mx-auto shadow-xl border-0 ring-1 ring-slate-200">
+            <Card className="w-full max-w-md mx-auto shadow-xl">
                 <CardHeader className="space-y-1">
                     <Link
                         href="/"
-                        className="flex items-center text-sm text-slate-500 hover:text-slate-900 mb-4 transition-colors"
+                        className="flex items-center text-sm text-muted-foreground hover:text-foreground mb-4 transition-colors"
                     >
                         <ArrowLeft className="mr-2 h-4 w-4" />
                         Back to Home
@@ -226,7 +226,7 @@ export function AuthForm({ role, type }: AuthFormProps) {
 
     if (isVerifying) {
         return (
-            <Card className="w-full max-w-md mx-auto shadow-xl border-0 ring-1 ring-slate-200">
+            <Card className="w-full max-w-md mx-auto shadow-xl">
                 <CardHeader className="space-y-1">
                     <CardTitle className="text-2xl font-bold">Verify your account</CardTitle>
                     <CardDescription>
@@ -243,7 +243,8 @@ export function AuthForm({ role, type }: AuthFormProps) {
                                 placeholder="123456"
                                 required
                                 disabled={isLoading}
-                                className="text-center text-lg tracking-widest"
+                                autoComplete="one-time-code"
+                                className="text-center text-lg tracking-widest bg-background text-foreground"
                             />
                         </div>
                         {error && (
@@ -271,11 +272,11 @@ export function AuthForm({ role, type }: AuthFormProps) {
     }
 
     return (
-        <Card className="w-full max-w-md mx-auto shadow-xl border-0 ring-1 ring-slate-200">
+        <Card className="w-full max-w-md mx-auto shadow-xl">
             <CardHeader className="space-y-1">
                 <Link
                     href="/"
-                    className="flex items-center text-sm text-slate-500 hover:text-slate-900 mb-4 transition-colors"
+                    className="flex items-center text-sm text-muted-foreground hover:text-foreground mb-4 transition-colors"
                 >
                     <ArrowLeft className="mr-2 h-4 w-4" />
                     Back to Home
@@ -302,6 +303,7 @@ export function AuthForm({ role, type }: AuthFormProps) {
                                 placeholder="John Doe"
                                 required
                                 disabled={isLoading}
+                                autoComplete="name"
                             />
                         </div>
                     )}
@@ -314,6 +316,7 @@ export function AuthForm({ role, type }: AuthFormProps) {
                             placeholder="name@example.com"
                             required
                             disabled={isLoading}
+                            autoComplete="email"
                         />
                     </div>
                     <div className="space-y-2">
@@ -324,6 +327,7 @@ export function AuthForm({ role, type }: AuthFormProps) {
                             type="password"
                             required
                             disabled={isLoading}
+                            autoComplete="current-password"
                         />
                     </div>
                     {error && (
@@ -335,13 +339,13 @@ export function AuthForm({ role, type }: AuthFormProps) {
                         {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                         {type === "login" ? "Sign In" : "Create Account"}
                     </Button>
-                    <div className="text-sm text-center text-slate-500">
+                    <div className="text-sm text-center text-muted-foreground">
                         {type === "login" ? (
                             <>
                                 Don&apos;t have an account?{" "}
                                 <Link
                                     href={`/${role}/signup`}
-                                    className="text-slate-900 font-medium hover:underline"
+                                    className="text-foreground font-medium hover:underline"
                                 >
                                     Sign Up
                                 </Link>
@@ -351,7 +355,7 @@ export function AuthForm({ role, type }: AuthFormProps) {
                                 Already have an account?{" "}
                                 <Link
                                     href={`/${role}/login`}
-                                    className="text-slate-900 font-medium hover:underline"
+                                    className="text-foreground font-medium hover:underline"
                                 >
                                     Sign In
                                 </Link>

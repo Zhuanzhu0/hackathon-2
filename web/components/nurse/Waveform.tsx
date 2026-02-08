@@ -134,7 +134,7 @@ export function Waveform({ title, color, type, frequency = 60 }: WaveformProps) 
     }, [color, frequency, type]);
 
     return (
-        <Card className="h-full bg-black border-slate-800">
+        <Card className="h-full bg-card border-border">
             <CardHeader className="pb-2">
                 <CardTitle className={`text-sm font-medium opacity-80`} style={{ color }}>
                     {title} Real-time

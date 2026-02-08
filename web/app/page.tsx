@@ -3,13 +3,17 @@ import { User, Stethoscope, HeartPulse, ArrowRight } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col">
+    <div className="min-h-screen bg-slate-50/50 flex flex-col">
       {/* Hero Section */}
-      <header className="bg-white border-b border-slate-200">
+      <header className="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <HeartPulse className="w-8 h-8 text-blue-600" />
-            <span className="text-xl font-bold text-slate-900">PulseGuard</span>
+          <div className="flex items-center gap-3">
+            <div className="relative w-10 h-10">
+              <img src="/logo.svg" alt="PulseGuard Logo" className="object-contain w-full h-full" />
+            </div>
+            <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-blue-500">
+              PulseGuard
+            </span>
           </div>
         </div>
       </header>
@@ -33,8 +37,8 @@ export default function Home() {
               icon={<Stethoscope className="w-12 h-12 text-blue-600" />}
               href="/doctor/signup"
               signInHref="/doctor/login"
-              color="bg-blue-50 hover:border-blue-200"
-              buttonColor="bg-blue-600 hover:bg-blue-700"
+              color="bg-white/60 hover:border-blue-200 ring-1 ring-blue-100"
+              buttonColor="bg-primary hover:bg-primary/90"
             />
 
             {/* Nurse Card */}
@@ -44,7 +48,7 @@ export default function Home() {
               icon={<HeartPulse className="w-12 h-12 text-teal-600" />}
               href="/nurse/signup"
               signInHref="/nurse/login"
-              color="bg-teal-50 hover:border-teal-200"
+              color="bg-white/60 hover:border-teal-200 ring-1 ring-teal-100"
               buttonColor="bg-teal-600 hover:bg-teal-700"
             />
 
@@ -55,7 +59,7 @@ export default function Home() {
               icon={<User className="w-12 h-12 text-indigo-600" />}
               href="/patient/signup"
               signInHref="/patient/login"
-              color="bg-indigo-50 hover:border-indigo-200"
+              color="bg-white/60 hover:border-indigo-200 ring-1 ring-indigo-100"
               buttonColor="bg-indigo-600 hover:bg-indigo-700"
             />
           </div>
@@ -90,7 +94,7 @@ function RoleCard({
 }) {
   return (
     <div
-      className={`relative p-8 rounded-2xl border border-slate-200 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${color} flex flex-col items-center text-center group`}
+      className={`relative p-8 rounded-2xl border border-transparent transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${color} flex flex-col items-center text-center group backdrop-blur-sm`}
     >
       <div className="mb-6 p-4 bg-white rounded-full shadow-sm ring-1 ring-slate-100 group-hover:scale-110 transition-transform duration-300">
         {icon}

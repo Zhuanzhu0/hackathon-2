@@ -17,11 +17,9 @@ export function PatientSidebar() {
     return (
         <aside className="fixed left-0 top-0 z-40 h-screen w-64 -translate-x-full border-r bg-white transition-transform sm:translate-x-0">
             <div className="flex h-full flex-col px-3 py-4">
-                <div className="mb-5 flex items-center pl-2.5 gap-2">
-                    <div className="bg-blue-600 p-1.5 rounded-lg">
-                        <Activity className="h-6 w-6 text-white" />
-                    </div>
-                    <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
+                <div className="mb-5 flex items-center pl-2.5 gap-3">
+                    <img src="/logo.svg" alt="PulseGuard Logo" className="w-9 h-9 object-contain" />
+                    <span className="self-center whitespace-nowrap text-xl font-bold text-foreground">
                         PulseGuard
                     </span>
                 </div>
@@ -33,8 +31,8 @@ export function PatientSidebar() {
                                 <Link
                                     href={item.href}
                                     className={`group flex items-center rounded-lg p-2 ${isActive
-                                            ? "bg-blue-600 text-white"
-                                            : "text-slate-900 hover:bg-slate-100"
+                                        ? "bg-blue-600 text-white"
+                                        : "text-slate-900 hover:bg-slate-100"
                                         }`}
                                 >
                                     <item.icon

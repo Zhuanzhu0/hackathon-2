@@ -12,17 +12,17 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
 const VitalsCard = ({ title, value, unit, icon: Icon, color, trend }: any) => (
-    <Card className="relative overflow-hidden border-none shadow-md bg-white">
-        <div className={`absolute left-0 top-0 h-full w-1 ${color}`} />
+    <Card className="relative overflow-hidden border border-border/50 shadow-sm bg-card hover:shadow-md transition-all duration-300">
+        <div className={`absolute left-0 top-0 h-full w-[2px] ${color}`} />
         <CardContent className="p-6">
             <div className="flex items-start justify-between">
                 <div>
-                    <p className="text-sm font-medium text-slate-500 mb-1">{title}</p>
+                    <p className="text-sm font-medium text-muted-foreground mb-1">{title}</p>
                     <div className="flex items-baseline gap-1">
-                        <h3 className="text-3xl font-bold text-slate-900 tracking-tight">
+                        <h3 className="text-3xl font-bold text-foreground tracking-tight">
                             {value}
                         </h3>
-                        <span className="text-sm text-slate-400 font-medium">{unit}</span>
+                        <span className="text-sm text-muted-foreground font-medium">{unit}</span>
                     </div>
                 </div>
                 <div className={`p-2 rounded-full ${color.replace('bg-', 'bg-opacity-10 bg-')} ${color.replace('bg-', 'text-')}`}>
@@ -32,8 +32,8 @@ const VitalsCard = ({ title, value, unit, icon: Icon, color, trend }: any) => (
             <div className="mt-4 flex items-center gap-2 text-sm">
                 {trend === 'up' && <ArrowUp className="h-4 w-4 text-red-500" />}
                 {trend === 'down' && <ArrowDown className="h-4 w-4 text-green-500" />}
-                {trend === 'stable' && <ArrowRight className="h-4 w-4 text-slate-400" />}
-                <span className="text-slate-500">vs last hour</span>
+                {trend === 'stable' && <ArrowRight className="h-4 w-4 text-muted-foreground" />}
+                <span className="text-muted-foreground">vs last hour</span>
             </div>
         </CardContent>
     </Card>

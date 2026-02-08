@@ -20,10 +20,31 @@ export interface AuthError {
  * Map Supabase auth errors to user-friendly messages
  */
 function mapAuthError(error: any): string {
-    const message = error?.message || "";
+    // Safety check for error object
+    if (!error) return "Unknown error occurred";
+
+    // Extract message safe handling
+    let message = "";
+    if (typeof error === "string") {
+        message = error;
+    } else if (error instanceof Error) {
+        message = error.message;
+    } else if (error && typeof error === "object") {
+        message = error.message || error.error_description || JSON.stringify(error);
+    }
+
+    // Network errors - catch AuthRetryableFetchError specifically by name or content
+    if (
+        message.includes("fetch failed") ||
+        message.includes("Network request failed") ||
+        message.includes("AuthRetryableFetchError") ||
+        (error && typeof error === "object" && (error.name === "AuthRetryableFetchError" || error.code === "PGRST301"))
+    ) {
+        return "Network connection failed. Please check your internet connection.";
+    }
 
     // Invalid credentials (wrong email or password)
-    if (message.includes("Invalid login credentials")) {
+    if (message.includes("Invalid login credentials") || message.includes("Invalid Grant")) {
         return "Invalid email or password";
     }
 
@@ -32,8 +53,23 @@ function mapAuthError(error: any): string {
         return "Please verify your email before signing in";
     }
 
+    // SMTP/Email errors
+    if (message.includes("Error sending confirmation email")) {
+        return "System Email Error: Unable to send confirmation email. Please contact support.";
+    }
+
+    // Rate limits
+    if (message.includes("Rate limit") || message.includes("429")) {
+        return "Too many requests. Please try again later.";
+    }
+
     // Fallback to original message or generic error
-    return message || "Sign in failed";
+    // Ensure we don't return "{}" string if that's what's happening
+    if (!message || message === "{}" || message.trim() === "") {
+        return "Authentication failed. Please try again.";
+    }
+
+    return message;
 }
 
 /**
@@ -69,7 +105,7 @@ export async function signUpUser(
             user: null,
             session: null,
             error: {
-                message: error?.message || "Signup failed",
+                message: mapAuthError(error),
                 status: error?.status
             }
         };
